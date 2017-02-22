@@ -1,13 +1,20 @@
 package com.example.faranak.mine_seeker;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Vibrator;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -34,7 +41,6 @@ public class GameboardUI extends AppCompatActivity {
     }
 
     private void createTable() {
-
         TableLayout myLayout = (TableLayout) findViewById(R.id.gameTable);
         TableRow tableRow = new TableRow(this);
         int counter = 0;
@@ -48,16 +54,17 @@ public class GameboardUI extends AppCompatActivity {
                 final int x = i;
                 final int y = j;
                 final int btnId = counter;
-//                final Button button = btn;
                 displayCellContent(btn, i, j);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (cells[x][y].getContainMine() && !cells[x][y].getCellClicked()) {
+                            Button button = (Button) findViewById(x * numberOfColumn + y);
+                            displayMine(button);
+                        }
                         gameboard.getClickedLocation(new Point(x, y));
-       //                 if (!cells[x][y].getCellClicked()){
                             displayNumberOfFoundMine();
                             dispalyNumberOfScan();
-       //                 }
                         for (int i = 0; i < numberOfColumn; i++){
                             Button button = (Button) findViewById(x * numberOfColumn + i);
                             displayCellContent(button,x, i);
@@ -66,6 +73,11 @@ public class GameboardUI extends AppCompatActivity {
                             Button button = (Button) findViewById(j * numberOfColumn + y);
                             displayCellContent(button, j, y);
                         }
+                        //if (gameboard.isEndOfTheGame()) {
+                            FragmentManager manager = getSupportFragmentManager();
+                            GameResultAlert dialog = new GameResultAlert();
+                            dialog.show(manager, "MessageGameResult");
+                        //}
                     }
                 });
                 tableRow.addView(btn);
@@ -73,19 +85,35 @@ public class GameboardUI extends AppCompatActivity {
         }
     }
 
+    private void displayMine(final Button btn) {
+        final int newWidth = btn.getWidth();
+        final int newHeight = btn.getHeight();
+        Animation animation = new AlphaAnimation(0.0f, 1.0f);
+        //Animation animation = new TranslateAnimation(-newWidth, 0, 0, 0);
+        animation.setDuration(1000);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mine_icon_scaled);
+        Bitmap scaleBitmap = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true);
+        Resources resource = getResources();
+        btn.setAnimation(animation);
+        btn.setBackground(new BitmapDrawable(resource, scaleBitmap));
+        btn.startAnimation(animation);
+        try {
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(500);
+        }
+        catch (Exception e){
+
+        }
+    }
+
     private void displayCellContent(Button btn, int x, int y){
         if (cells[x][y].getContainMine() && cells[x][y].getCellClicked()){
-            int newWidth = btn.getWidth();
-            int newHeight = btn.getHeight();
-            Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
-            Bitmap scaleBitmap = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true);
-            Resources resource = getResources();
-            btn.setBackground(new BitmapDrawable(resource, scaleBitmap));
-           // btn.setBackgroundResource(R.drawable.ball);
             if (cells[x][y].getCellNumShown()){
                 btn.setText("" + cells[x][y].getCellNumber());
             }
-
+            else{
+                btn.setText("?");
+            }
         }
         else if(!cells[x][y].getContainMine() && cells[x][y].getCellClicked()){
             btn.setText("" + cells[x][y].getCellNumber());

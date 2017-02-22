@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        app:srcCompat="@mipmap/happy_minion"
+        android:id="@+id/imageView"
+        android:scaleType="fitEnd"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="@string/back_to_main_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnBack"
+        android:fontFamily="casual"
+        android:textAllCaps="false"
+        android:textSize="12sp"
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/tvCongrats"
+        android:layout_alignLeft="@+id/tvCongrats"
+        android:layout_alignStart="@+id/tvCongrats" />
+
+    <TextView
+        android:text="@string/congratulations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvCongrats"
+        android:textSize="18sp"
+        android:fontFamily="casual"
+        android:layout_marginTop="59dp"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_toLeftOf="@+id/imageView"
+        android:layout_toStartOf="@+id/imageView"
+        android:layout_marginRight="59dp"
+        android:layout_marginEnd="59dp" />
+</RelativeLayout>

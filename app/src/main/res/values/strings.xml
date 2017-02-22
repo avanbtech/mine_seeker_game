@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Mine_Seeker</string>
+    <string name="back_to_main_menu">Back to main menu</string>
+    <string name="congratulations">Congratulations!</string>
 </resources>

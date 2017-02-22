@@ -2,6 +2,7 @@ package com.example.faranak.mine_seeker.mine_seeker_model;
 
 import android.graphics.Point;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -66,9 +67,24 @@ public class Gameboard {
         //should check of repitation
         Random r = new Random();
         int x, y;
+        ArrayList<Point> mineLocations = new ArrayList<>();
         for (int i = 0; i < numberOfMine; i++) {
-            x = Math.abs(r.nextInt()) % numberOfRow;
-            y = Math.abs(r.nextInt()) % numberOfColumn;
+            while(true){
+                x = Math.abs(r.nextInt()) % numberOfRow;
+                y = Math.abs(r.nextInt()) % numberOfColumn;
+                boolean found = false;
+                for(Point p : mineLocations){
+                    if(p.equals(x, y)){
+                        found = true;
+                        break;
+                    }
+                }
+                if(found){
+                    continue;
+                }
+                break;
+            }
+            mineLocations.add(i, new Point(x, y));
             boardCells[x][y].setContainMine(true);
         }
     }
@@ -112,7 +128,7 @@ public class Gameboard {
         }
     }
 
-    private boolean isEndOfTheGame(){
+    public boolean isEndOfTheGame(){
         return (numberOfMine == numberOfFound);
     }
 

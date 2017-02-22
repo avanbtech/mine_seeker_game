@@ -16,6 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".GameboardUI"></activity>
+        <uses-permission
+            android:name="android.permission.VIBRATE"></uses-permission>
     </application>
 
 </manifest>
