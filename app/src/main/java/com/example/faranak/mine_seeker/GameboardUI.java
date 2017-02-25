@@ -1,6 +1,7 @@
 package com.example.faranak.mine_seeker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,16 +28,23 @@ import org.w3c.dom.Text;
 
 public class GameboardUI extends AppCompatActivity {
 
-    private int numberOfRow = 5;
-    private int numberOfColumn = 7;
-    private int numberOfMine = 8;
-    Gameboard gameboard = new Gameboard(numberOfMine);
-    Cell[][] cells = gameboard.getBoardCells();
+    private int numberOfRow;
+    private int numberOfColumn;
+    private int numberOfMine;
+    Gameboard gameboard;
+    Cell[][] cells;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gameboard_ui);
+        Intent intent = getIntent();
+        Options options = (Options) intent.getSerializableExtra("options");
+        numberOfRow = options.getNumberOfRows();
+        numberOfColumn = options.getNumberOfColumns();
+        numberOfMine = options.getNumberOfMines();
+        gameboard = new Gameboard(numberOfMine, numberOfRow, numberOfColumn);
+        cells = gameboard.getBoardCells();
         createTable();
     }
 
@@ -73,11 +81,11 @@ public class GameboardUI extends AppCompatActivity {
                             Button button = (Button) findViewById(j * numberOfColumn + y);
                             displayCellContent(button, j, y);
                         }
-                        //if (gameboard.isEndOfTheGame()) {
+                        if (gameboard.isEndOfTheGame()) {
                             FragmentManager manager = getSupportFragmentManager();
                             GameResultAlert dialog = new GameResultAlert();
                             dialog.show(manager, "MessageGameResult");
-                        //}
+                        }
                     }
                 });
                 tableRow.addView(btn);

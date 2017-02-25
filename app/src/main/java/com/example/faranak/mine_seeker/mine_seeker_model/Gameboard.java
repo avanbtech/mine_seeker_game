@@ -10,12 +10,12 @@ import java.util.Random;
  */
 
 public class Gameboard {
-    private int numberOfRow = 5;
-    private int numberOfColumn = 7;
+    private int numberOfRow;
+    private int numberOfColumn;
     private int numberOfFound = 0;
     private int numberOfScan = 0;
-    private int numberOfMine; //should get from UI
-    private Cell[][] boardCells = new Cell[numberOfRow][numberOfColumn];
+    private int numberOfMine;
+    private Cell[][] boardCells;
 
     public Cell[][] getBoardCells(){
         return boardCells;
@@ -33,9 +33,11 @@ public class Gameboard {
         return numberOfScan;
     }
 
-    public Gameboard(int numberOfMine){
+    public Gameboard(int numberOfMine,int numberOfRow,int numberOfColumn){
+        boardCells = new Cell[numberOfRow][numberOfColumn];
         this.numberOfMine = numberOfMine;
-        boolean endGame = false;
+        this.numberOfRow = numberOfRow;
+        this.numberOfColumn = numberOfColumn;
         for (int i = 0; i < numberOfRow; i++){
             for (int j = 0; j < numberOfColumn; j++){
                 boardCells[i][j] = new Cell();
@@ -48,23 +50,9 @@ public class Gameboard {
                 calculateCellNumber(new Point(i, j));
             }
         }
-        //Need to use random locations for mine
     }
 
-    public void setNumberOfRow(int numberOfRow){
-        this.numberOfRow = numberOfRow;
-    }
-    public int getNumberOfRow(){
-        return numberOfRow;
-    }
-    public int getNumberOfColumn(){
-        return numberOfColumn;
-    }
-    public void setNumberOfColumn(int numberOfColumn){
-        this.numberOfColumn = numberOfColumn;
-    }
     private void randomLocations(int numberOfMine){
-        //should check of repitation
         Random r = new Random();
         int x, y;
         ArrayList<Point> mineLocations = new ArrayList<>();
@@ -88,7 +76,7 @@ public class Gameboard {
             boardCells[x][y].setContainMine(true);
         }
     }
-    public void calculateCellNumber(Point location){    //Should be checked and check for update and clicked cell
+    public void calculateCellNumber(Point location){
         int number = 0;
         for(int i = 0; i < numberOfColumn; i++){
             if(boardCells[location.x][i].getContainMine() && !boardCells[location.x][i].getCellClicked()) {
