@@ -5,25 +5,90 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class OptionUI extends AppCompatActivity {
 
-    Options options;
+    private Options options;
+    private int numberOfRow;
+    private int numberOfColumn;
+    private int numberOfMines;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_option_ui);
         Intent intent = getIntent();
         options = (Options) intent.getSerializableExtra("options");
-        setNumOfMineOptions();
-        setSizeOfGame();
         displayDefaultNumOfMine();
         displayDefaultSizeOfGame();
+        setNumOfMineOptions();
+        setSizeOfGame();
         makeOkButton();
         makeCancelButton();
+        displaySizeOfGame();
+        displayNumberOfMines();
+        makeNumberOfMineSeekbar();
+        makeGameSizeSeekbar();
+    }
+
+    private void makeNumberOfMineSeekbar() {
+        SeekBar seekbar = (SeekBar) findViewById(R.id.seekBarNumberOfMines);
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                setNumOfMineOptions();
+                displayNumberOfMines();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+    private void makeGameSizeSeekbar() {
+        SeekBar seekbar = (SeekBar) findViewById(R.id.seekBarGameSize);
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                setSizeOfGame();
+                displaySizeOfGame();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+
+
+    private void displaySizeOfGame() {
+        TextView tvSizeOfGame = (TextView) findViewById(R.id.tvGameSize);
+        tvSizeOfGame.setText("Game Size: " + numberOfRow + "x" + numberOfColumn);
+    }
+
+    private void displayNumberOfMines() {
+        TextView tvNumberOfMine = (TextView) findViewById(R.id.tvNumberOfMines);
+        tvNumberOfMine.setText("Number of Mines: " + numberOfMines);
     }
 
     private void makeOkButton() {
@@ -51,52 +116,49 @@ public class OptionUI extends AppCompatActivity {
     }
 
     private void setNumOfMineOptions() {
-        int numOfMine = 0;
         SeekBar seekbar = (SeekBar) findViewById(R.id.seekBarNumberOfMines);
         int position = seekbar.getProgress();
         switch (position){
             case 0:
-                numOfMine = 6;
+                numberOfMines = 6;
                 break;
             case 1:
-                numOfMine = 10;
+                numberOfMines = 10;
                 break;
             case 2:
-                numOfMine = 15;
+                numberOfMines = 15;
                 break;
             case 3:
-                numOfMine = 20;
+                numberOfMines = 20;
         }
-        options.setNumberOfMines(numOfMine);
+        options.setNumberOfMines(numberOfMines);
     }
 
     private void setSizeOfGame(){
         SeekBar seekbar = (SeekBar) findViewById(R.id.seekBarGameSize);
         int position = seekbar.getProgress();
-        int numOfRow = 0;
-        int numOfColumn = 0;
         switch (position){
             case 0:
-                numOfRow = 4;
-                numOfColumn = 6;
+                numberOfRow = 4;
+                numberOfColumn = 6;
                 break;
             case 1:
-                numOfRow = 5;
-                numOfColumn = 10;
+                numberOfRow = 5;
+                numberOfColumn = 10;
                 break;
             case 2:
-                numOfRow = 6;
-                numOfColumn = 15;
+                numberOfRow = 6;
+                numberOfColumn = 15;
                 break;
         }
-        options.setNumberOfRows(numOfRow);
-        options.setNumberOfColumns(numOfColumn);
+        options.setNumberOfRows(numberOfRow);
+        options.setNumberOfColumns(numberOfColumn);
     }
 
     private void displayDefaultNumOfMine() {
-        int numOfMine = options.getNumberOfMines();
+        numberOfMines = options.getNumberOfMines();
         int position = 0;
-        switch (numOfMine){
+        switch (numberOfMines){
             case 6:
                 position = 0;
                 break;
@@ -115,10 +177,10 @@ public class OptionUI extends AppCompatActivity {
     }
 
     private void displayDefaultSizeOfGame() {
-        int numOfColumn = options.getNumberOfColumns();
-        int numOfRow = options.getNumberOfRows();
+        numberOfColumn = options.getNumberOfColumns();
+        numberOfRow = options.getNumberOfRows();
         int position = 0;
-        switch (numOfRow){
+        switch (numberOfRow){
             case 4:
                 position = 0;
                 break;
