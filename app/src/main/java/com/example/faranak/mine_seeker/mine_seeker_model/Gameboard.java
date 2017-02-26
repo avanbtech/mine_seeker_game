@@ -2,6 +2,7 @@ package com.example.faranak.mine_seeker.mine_seeker_model;
 
 import android.graphics.Point;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -9,7 +10,7 @@ import java.util.Random;
  * Created by faranakpouya on 2017-02-11.
  */
 
-public class Gameboard {
+public class Gameboard implements Serializable {
     private int numberOfRow;
     private int numberOfColumn;
     private int numberOfFound = 0;
@@ -165,5 +166,13 @@ public class Gameboard {
             return true;
         }
         return false;
+    }
+
+    public int getNumberOfRow() {
+        return numberOfRow;
+    }
+
+    public int getNumberOfColumn() {
+        return numberOfColumn;
     }
 }

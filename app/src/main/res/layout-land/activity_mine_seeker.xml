@@ -12,40 +12,72 @@
     tools:context="com.example.faranak.mine_seeker.MineSeeker">
 
     <Button
-        android:text="Help"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnHelp"
-        android:layout_marginTop="17dp"
-        android:layout_below="@+id/btnOption"
-        android:layout_alignLeft="@+id/btnOption"
-        android:layout_alignStart="@+id/btnOption"
-        android:textStyle="normal|bold"
-        android:textAllCaps="false" />
-
-    <Button
-        android:text="Options"
+        android:text="@string/options"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/btnOption"
         android:textAllCaps="false"
         android:textStyle="normal|bold"
-        android:textSize="14sp"
-        android:layout_marginTop="14dp"
-        android:layout_below="@+id/btnPlayGame"
-        android:layout_alignLeft="@+id/btnPlayGame"
-        android:layout_alignStart="@+id/btnPlayGame" />
+        android:textSize="18sp"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/btnLoadGame"
+        android:layout_alignStart="@+id/btnLoadGame"
+        android:width="200dp"
+        android:fontFamily="casual"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/gradiant_button_red"
+        android:layout_marginTop="10dp"/>
 
     <Button
-        android:text="Play Game"
+        android:text="@string/help"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp"
+        android:id="@+id/btnHelp"
+        android:textStyle="normal|bold"
+        android:textAllCaps="false"
+        android:layout_below="@+id/btnOption"
+        android:layout_alignLeft="@+id/btnOption"
+        android:layout_alignStart="@+id/btnOption"
+        android:width="200dp"
+        android:fontFamily="casual"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/gradiant_button_green"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:text="@string/load_last_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnLoadGame"
+        android:textStyle="normal|bold"
+        android:textAllCaps="false"
+        android:layout_above="@+id/btnOption"
+        android:layout_alignLeft="@+id/btnPlayGame"
+        android:layout_alignStart="@+id/btnPlayGame"
+        android:width="200dp"
+        android:textSize="18sp"
+        android:fontFamily="casual"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/gradiant_button_yellow"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:text="@string/play_new_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="22dp"
+        android:layout_marginStart="22dp"
         android:id="@+id/btnPlayGame"
         android:textAllCaps="false"
         android:textStyle="normal|bold"
-        android:layout_alignParentTop="true"
+        android:width="200dp"
+        android:background="@drawable/gradiant_button"
+        android:textColor="#FFFFFF"
+        android:fontFamily="casual"
+        android:textSize="18sp"
+        android:layout_above="@+id/btnLoadGame"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"/>
 </RelativeLayout>

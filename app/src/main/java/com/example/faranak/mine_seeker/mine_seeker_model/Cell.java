@@ -2,11 +2,13 @@ package com.example.faranak.mine_seeker.mine_seeker_model;
 
 import android.graphics.Point;
 
+import java.io.Serializable;
+
 /**
  * Created by faranakpouya on 2017-02-11.
  */
 
-public class Cell {
+public class Cell implements Serializable{
 
     boolean cellClicked = false;
     boolean containMine = false;

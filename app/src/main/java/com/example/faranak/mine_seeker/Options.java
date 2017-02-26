@@ -3,9 +3,9 @@ package com.example.faranak.mine_seeker;
 import java.io.Serializable;
 
 public class Options implements Serializable{
-    private int numberOfMines = 6;
+    private int numberOfMines = 4;
     private int numberOfRows = 5;
-    private int numberOfColumns = 10;
+    private int numberOfColumns = 6;
 
     public int getNumberOfColumns() {
         return numberOfColumns;

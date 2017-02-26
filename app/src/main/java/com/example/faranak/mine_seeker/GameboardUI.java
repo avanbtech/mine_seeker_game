@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
@@ -32,18 +33,25 @@ import com.example.faranak.mine_seeker.mine_seeker_model.Gameboard;
 
 import org.w3c.dom.Text;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 
-public class GameboardUI extends AppCompatActivity {
+public class GameboardUI extends AppCompatActivity{
 
     private int numberOfRow;
     private int numberOfColumn;
     private int numberOfMine;
-    Gameboard gameboard;
-    Cell[][] cells;
-    SharedPreferences sharedPreferences;
-    String TOP_SCORE = "TopScore";
-    String NUMBER_PLAYED = "NumberPlayed";
+    private Gameboard gameboard;
+    private Cell[][] cells;
+    private SharedPreferences sharedPreferences;
+    private String TOP_SCORE = "TopScore";
+    private String NUMBER_PLAYED = "NumberPlayed";
+    private int topScore;
+    private int numberPlayed;
+    private String GAME_FILE_NAME = "GameState";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,27 +64,100 @@ public class GameboardUI extends AppCompatActivity {
         numberOfRow = options.getNumberOfRows();
         numberOfColumn = options.getNumberOfColumns();
         numberOfMine = options.getNumberOfMines();
+        boolean loadGame = intent.getBooleanExtra("loadGame", false);
         gameboard = new Gameboard(numberOfMine, numberOfRow, numberOfColumn);
+        if(loadGame) {
+            loadLastGame();
+            numberOfRow = gameboard.getNumberOfRow();
+            numberOfColumn = gameboard.getNumberOfColumn();
+            numberOfMine = gameboard.getNumberOfMine();
+        }
         cells = gameboard.getBoardCells();
         createTable();
         displayTopScore();
+        displayNumberOfFoundMine();
+        dispalyNumberOfScan();
+        updateGameboard();
+    }
+
+    private void updateGameboard() {
+        final RelativeLayout layout = (RelativeLayout) findViewById(R.id.activity_gameboard_ui);
+        ViewTreeObserver vto = layout.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener (new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                for(int i = 0; i < numberOfRow; i++) {
+                    for (int j = 0; j < numberOfColumn; j++) {
+                        Button button = (Button) findViewById(i * numberOfColumn + j);
+                        if (cells[i][j].getContainMine() && cells[i][j].getCellClicked()) {
+                            displayMine(button);
+                        }
+                        else {
+                            displayBackgroundButton(button);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void displayBackgroundButton(final Button btn){
+        int newWidth = btn.getWidth();
+        int newHeight = btn.getHeight();
+        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.minionlock);
+        Bitmap scaleBitmap = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true);
+        Resources resource = getResources();
+        btn.setBackground(new BitmapDrawable(resource, scaleBitmap));
+
+    }
+
+    private void loadLastGame() {
+        try {
+            FileInputStream fis = getApplicationContext().openFileInput(GAME_FILE_NAME);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            Gameboard loadedGameBoard = (Gameboard) is.readObject();
+            is.close();
+            fis.close();
+            gameboard = loadedGameBoard;
+        }
+        catch(Exception e) {
+        }
+    }
+
+    private void saveGame() {
+        try {
+            FileOutputStream fos = getApplicationContext().openFileOutput(GAME_FILE_NAME, Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(gameboard);
+            os.close();
+            fos.close();
+        }
+        catch(Exception e) {
+        }
+    }
+
+    private String getTopScoreConfigurationName() {
+        return TOP_SCORE + numberOfMine + "_" + numberOfRow + "_" + numberOfColumn;
+    }
+
+    private String getNumberPlayedConfigurationName() {
+        return NUMBER_PLAYED + numberOfMine + "_" + numberOfRow + "_" + numberOfColumn;
     }
 
     private boolean isSameTopScoreConfiguration(String configuration) {
-        String currentConfigureation = TOP_SCORE + numberOfMine + "_" + numberOfRow + "_" + numberOfColumn;
-        return currentConfigureation.equals(configuration);
+        return configuration.equals(getTopScoreConfigurationName());
     }
 
     private boolean isSameNumberPlayedConfiguration(String configuration) {
-        String currentConfigureation = NUMBER_PLAYED + numberOfMine + "_" + numberOfRow + "_" + numberOfColumn;
-        return currentConfigureation.equals(configuration);
+        return configuration.equals(getNumberPlayedConfigurationName());
     }
 
     private void displayTopScore() {
         sharedPreferences = getApplicationContext().getSharedPreferences("TopScore", MODE_PRIVATE);
         Map<String, ?> values = sharedPreferences.getAll();
-        int topScore = -1;
-        int numberPlayed = 0;
+        topScore = -1;
+        numberPlayed = 0;
         for (Map.Entry<String, ?> entry : values.entrySet()) {
             if(isSameTopScoreConfiguration(entry.getKey()))
             {
@@ -123,7 +204,6 @@ public class GameboardUI extends AppCompatActivity {
             tableLayout.addView(tableRow);
             for(int j = 0; j < numberOfColumn; j++) {
                 Button btn = new Button(this);
-                //btn.setWidth(buttonWidth/10);
                 btn.setLayoutParams(new TableRow.LayoutParams(buttonWidth, buttonHeight));
                 btn.setId(counter);
                 counter++;
@@ -134,13 +214,16 @@ public class GameboardUI extends AppCompatActivity {
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(gameboard.isEndOfTheGame()) {
+                            return;
+                        }
                         if (cells[x][y].getContainMine() && !cells[x][y].getCellClicked()) {
                             Button button = (Button) findViewById(x * numberOfColumn + y);
                             displayMine(button);
                         }
                         gameboard.getClickedLocation(new Point(x, y));
-                            displayNumberOfFoundMine();
-                            dispalyNumberOfScan();
+                        displayNumberOfFoundMine();
+                        dispalyNumberOfScan();
                         for (int i = 0; i < numberOfColumn; i++){
                             Button button = (Button) findViewById(x * numberOfColumn + i);
                             displayCellContent(button,x, i);
@@ -149,10 +232,12 @@ public class GameboardUI extends AppCompatActivity {
                             Button button = (Button) findViewById(j * numberOfColumn + y);
                             displayCellContent(button, j, y);
                         }
+                        saveGame();
                         if (gameboard.isEndOfTheGame()) {
                             FragmentManager manager = getSupportFragmentManager();
                             GameResultAlert dialog = new GameResultAlert();
                             dialog.show(manager, "MessageGameResult");
+                            saveResults();
                         }
                     }
                 });
@@ -162,12 +247,11 @@ public class GameboardUI extends AppCompatActivity {
     }
 
     private void displayMine(final Button btn) {
-        final int newWidth = btn.getWidth();
-        final int newHeight = btn.getHeight();
+        int newWidth = btn.getWidth();
+        int newHeight = btn.getHeight();
         Animation animation = new AlphaAnimation(0.0f, 1.0f);
-        //Animation animation = new TranslateAnimation(-newWidth, 0, 0, 0);
         animation.setDuration(1000);
-        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mine_icon_scaled);
+        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mine_icon_scaled_bg_removed);
         Bitmap scaleBitmap = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true);
         Resources resource = getResources();
         btn.setAnimation(animation);
@@ -208,5 +292,16 @@ public class GameboardUI extends AppCompatActivity {
         String updateScanText = "# Scan used: " + gameboard.getNumberOfScan();
         TextView scanText = (TextView) findViewById(R.id.ScanUsed);
         scanText.setText(updateScanText);
+    }
+
+    private void saveResults(){
+        int numOfScan = gameboard.getNumberOfScan();
+        numberPlayed++;
+        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+        if(topScore == -1 || topScore > numOfScan) {
+            sharedPreferencesEditor.putInt(getTopScoreConfigurationName(), numOfScan);
+        }
+        sharedPreferencesEditor.putInt(getNumberPlayedConfigurationName(), numberPlayed);
+        sharedPreferencesEditor.commit();
     }
 }

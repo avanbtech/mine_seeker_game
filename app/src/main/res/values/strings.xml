@@ -2,4 +2,19 @@
     <string name="app_name">Mine_Seeker</string>
     <string name="back_to_main_menu">Back to main menu</string>
     <string name="congratulations">Congratulations!</string>
+    <string name="scan_used"># Scan used: -</string>
+    <string name="founfound_0_of_minesd_0_of_mines">FounFound 0 of - minesd 0 of - mines</string>
+    <string name="top_score">Top Score</string>
+    <string name="number_of_games">Number of Games:</string>
+    <string name="instructions">Instructions</string>
+    <string name="about_author">About Author</string>
+    <string name="textview">TextView</string>
+    <string name="options">Options</string>
+    <string name="help">Help</string>
+    <string name="load_last_game">Load Last Game</string>
+    <string name="play_new_game">Play New Game</string>
+    <string name="game_size">Game Size:</string>
+    <string name="number_of_mines">Number of Mines:</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -14,17 +14,20 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:stretchColumns="*"
-        android:layout_marginBottom="40dp">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="30dp">
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_marginTop="20dp">
 
             <TextView
-                android:text="Game Size:"
+                android:text="@string/game_size"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
@@ -35,17 +38,18 @@
                 android:id="@+id/tvGameSize"
                 android:layout_weight=".2"
                 android:layout_width="wrap_content"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:fontFamily="casual" />
 
             <SeekBar
                 style="@android:style/Widget.SeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:max="2"
-                android:progress="1"
+                android:progress="0"
                 android:id="@+id/seekBarGameSize"
                 android:layout_weight=".8"
-                android:layout_marginLeft="80dp"/>
+                android:layout_marginLeft="50dp"/>
         </TableRow>
 
         <TableRow
@@ -53,7 +57,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
             <TextView
-                android:text="Number of Mines:"
+                android:text="@string/number_of_mines"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -61,18 +65,19 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="24dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="29dp"
+                android:layout_marginTop="20dp"
                 android:id="@+id/tvNumberOfMines"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:fontFamily="casual" />
 
             <SeekBar
                 style="@android:style/Widget.SeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:max="3"
-                android:progress="1"
+                android:progress="0"
                 android:id="@+id/seekBarNumberOfMines"
-                android:layout_marginLeft="80dp"/>
+                android:layout_marginLeft="50dp" />
         </TableRow>
         <TableRow
             android:layout_width="0dp"
@@ -80,30 +85,39 @@
             android:layout_weight="1">
 
             <Button
-                android:text="OK"
+                android:text="@string/ok"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginLeft="59dp"
-                android:layout_marginStart="59dp"
-                android:layout_marginBottom="47dp"
-                android:id="@+id/btnOK" />
+                android:layout_marginLeft="0dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="70dp"
+                android:id="@+id/btnOK"
+                android:textSize="18sp"
+                android:fontFamily="casual"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/gradiant_button_green" />
 
             <Button
-                android:text="Cancel"
-                android:layout_width="wrap_content"
+                android:text="@string/cancel"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/btnOK"
                 android:layout_toRightOf="@+id/btnOK"
                 android:layout_toEndOf="@+id/btnOK"
-                android:layout_marginLeft="111dp"
-                android:layout_marginStart="111dp"
-                android:id="@+id/btnCancel" />
+                android:layout_marginLeft="59dp"
+                android:layout_marginStart="110dp"
+                android:layout_marginEnd="110dp"
+                android:id="@+id/btnCancel"
+                android:textSize="18sp"
+                android:fontFamily="casual"
+                android:textColor="#FFFFFF"
+                android:layout_width="wrap_content"
+                android:background="@drawable/gradiant_button_red" />
         </TableRow>
     </TableLayout>
-
 
 
 </RelativeLayout>
