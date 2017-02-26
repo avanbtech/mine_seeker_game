@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -211,11 +212,16 @@ public class GameboardUI extends AppCompatActivity{
                 final int y = j;
                 final int btnId = counter;
                 displayCellContent(btn, i, j);
+                final MediaPlayer clickSound = MediaPlayer.create(this, R.raw.btn_click);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(gameboard.isEndOfTheGame()) {
                             return;
+                        }
+                        if(gameboard.validateClick(new Point(x, y))) {
+
+                            clickSound.start();
                         }
                         if (cells[x][y].getContainMine() && !cells[x][y].getCellClicked()) {
                             Button button = (Button) findViewById(x * numberOfColumn + y);
