@@ -6,9 +6,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by faranakpouya on 2017-02-11.
- */
 
 public class Gameboard implements Serializable {
     private int numberOfRow;
@@ -123,10 +120,9 @@ public class Gameboard implements Serializable {
 
     public void updateGameboard(Point location){
         if (isEndOfTheGame()){
-            //Display cong. reset eveything
             return;
         }
-        //numberOfScan should be checked again for shorter code
+
         if(!boardCells[location.x][location.y].getCellClicked() && boardCells[location.x][location.y].getContainMine()){
             numberOfScan--;
         }

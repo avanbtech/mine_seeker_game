@@ -210,7 +210,6 @@ public class GameboardUI extends AppCompatActivity{
                 counter++;
                 final int x = i;
                 final int y = j;
-                final int btnId = counter;
                 displayCellContent(btn, i, j);
                 final MediaPlayer clickSound = MediaPlayer.create(this, R.raw.btn_click);
                 btn.setOnClickListener(new View.OnClickListener() {
@@ -294,7 +293,6 @@ public class GameboardUI extends AppCompatActivity{
     }
 
     private void dispalyNumberOfScan(){
-        int numOfScan = gameboard.getNumberOfScan();
         String updateScanText = "# Scan used: " + gameboard.getNumberOfScan();
         TextView scanText = (TextView) findViewById(R.id.ScanUsed);
         scanText.setText(updateScanText);

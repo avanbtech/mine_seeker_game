@@ -4,10 +4,6 @@ import android.graphics.Point;
 
 import java.io.Serializable;
 
-/**
- * Created by faranakpouya on 2017-02-11.
- */
-
 public class Cell implements Serializable{
 
     boolean cellClicked = false;
